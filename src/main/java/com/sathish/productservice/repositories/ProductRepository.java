@@ -30,4 +30,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> sathishNalabothula(@Param("s") String s);
     @Query("select p from Product p where p.id > :id")
     List<Product> someThing(@Param("id") Long id);
+
+    List<Product> findByTitleContaining(String query);
 }

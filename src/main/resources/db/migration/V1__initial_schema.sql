@@ -43,3 +43,5 @@ ALTER TABLE category_featured_products
 
 ALTER TABLE category_featured_products
     ADD CONSTRAINT fk_catfeapro_on_product FOREIGN KEY (featured_products_id) REFERENCES product (id);
+
+ALTER TABLE category ADD COLUMN total_products_count INT;

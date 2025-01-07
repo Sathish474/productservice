@@ -2,10 +2,11 @@ package com.sathish.productservice.test.generics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Client {
     public static void main(String[] args) {
-        Pair<String, Integer> pair = new Pair<>();
+       /* Pair<String, Integer> pair = new Pair<>();
         pair.setFirst("first");
         pair.setSecond(10);
 
@@ -29,6 +30,32 @@ public class Client {
 
         List<Animal> dogs = new ArrayList<>();
 
-        Test.doSomething(dogs);
+        Test.doSomething(dogs);*/
+        example1();
+    }
+
+    public static void example1(){
+        List<Integer> list = List.of(1,2,3,4,5,6);
+        Stream<Integer> stream1 = list.stream();
+        // Terminal operation ends the stream and the same stream cannot be used again
+        stream1.forEach(i -> System.out.print(i + " "));
+        System.out.println();
+
+        Stream<Integer> stream2 = list.stream();
+        stream2.forEach(i -> System.out.print(i + " "));
+        System.out.println();
+
+        Stream<Integer> stream3 = list.stream();
+        stream3.map((i) -> i*i).forEach( i -> System.out.print(i + " "));
+        System.out.println();
+
+        Stream<Integer> stream4 = list.stream();
+        stream4.filter(i -> i%2 == 0).map(i -> i * i).forEach(i -> System.out.print(i + " "));
+        System.out.println();
+
+        list.forEach(i -> System.out.print(i + " "));
+        System.out.println();
+
+        //list.stream().reduce();
     }
 }
