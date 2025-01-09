@@ -6,6 +6,7 @@ import com.sathish.productservice.models.Product;
 import com.sathish.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final RestTemplate restTemplate;
 
-    public ProductController(@Qualifier("databaseProductService") ProductService productService) {
+    public ProductController(@Qualifier("databaseProductService") ProductService productService, RestTemplate restTemplate) {
         this.productService = productService;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping("")
@@ -29,6 +32,8 @@ public class ProductController {
 
     @GetMapping("")
     public GetAllProductResponseDto getAllProducts() {
+        boolean isValid = Boolean.TRUE.equals(restTemplate.getForObject("http://userservice/auth/validate?token=hello", Boolean.class));
+        System.out.println("IS Valid Response from user service eureka client" + isValid);
         List<Product> productList = productService.getAllProducts();
         GetAllProductResponseDto getAllProductResponseDto = new GetAllProductResponseDto();
         List<GetProductDto> productDtoList = new ArrayList<>();
