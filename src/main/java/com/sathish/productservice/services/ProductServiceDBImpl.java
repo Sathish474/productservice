@@ -4,6 +4,7 @@ import com.sathish.productservice.models.Category;
 import com.sathish.productservice.models.Product;
 import com.sathish.productservice.repositories.CategoryRepository;
 import com.sathish.productservice.repositories.ProductRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,14 @@ public class ProductServiceDBImpl implements ProductService{
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductServiceDBImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public ProductServiceDBImpl(ProductRepository productRepository,
+                                CategoryRepository categoryRepository,
+                                RedisTemplate<String, Object> redisTemplate) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.redisTemplate = redisTemplate;
     }
     @Override
     public Product createProduct(Product product) {
@@ -25,8 +31,10 @@ public class ProductServiceDBImpl implements ProductService{
         //toBeCreatedInProduct.setName(product.getCategory().getName());
                 //getCategory(product);
         product.setCategory(toBeCreatedInProduct);
-
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        // Insert product in cache
+        redisTemplate.opsForHash().put("product", savedProduct.getId().toString(), savedProduct);
+        return savedProduct;
     }
 
     private Category getCategory(Product product) {
@@ -69,18 +77,31 @@ public class ProductServiceDBImpl implements ProductService{
 
 
         if (product.getCategory() != null){
-            Category toBeCreatedInProduct = getCategory(product);
+            Category toBeCreatedInProduct = getCategory(tobeUpdatedProduct);
             tobeUpdatedProduct.setCategory(toBeCreatedInProduct);
         }
-        return productRepository.save(tobeUpdatedProduct);
+        Product updatedProduct = productRepository.save(tobeUpdatedProduct);
+        // update product in cache
+        redisTemplate.opsForHash().put("product", updatedProduct.getId().toString(), updatedProduct);
+        return updatedProduct;
     }
 
     @Override
     public Product getProduct(Long id) {
+        // Check if prouduct is present in cache
+        Product product = (Product) redisTemplate.opsForHash().get("product", id.toString());
+        // cache hit
+        if (product != null) {
+            return product;
+        }
+        // cache miss
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty()) {
             throw new RuntimeException("Product not found");
         }
+        product = optionalProduct.get();
+        // save product in cache
+        redisTemplate.opsForHash().put("product", id.toString(), product);
         return optionalProduct.get();
     }
 
@@ -91,6 +112,7 @@ public class ProductServiceDBImpl implements ProductService{
             throw new RuntimeException("Product not found");
         }
         productRepository.deleteById(id);
+        redisTemplate.opsForHash().delete("product", id.toString());
         return true;
     }
 

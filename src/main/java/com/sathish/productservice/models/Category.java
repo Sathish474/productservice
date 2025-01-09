@@ -1,7 +1,9 @@
 package com.sathish.productservice.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +20,10 @@ public class Category extends BaseModel {
     private String name;
     private String description;
     @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @JsonManagedReference
     private List<Product> featuredProducts;
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Product> allProducts;
     private int totalProductsCount;
 }

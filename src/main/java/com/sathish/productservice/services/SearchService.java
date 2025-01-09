@@ -39,7 +39,6 @@ public class SearchService {
            Filter dynamicFilter = (productsList, key, allowedValues) -> {
                return productsList.stream()
                        .filter(product -> {
-                           System.out.println("product: " + product.getTitle());
                            for (String allowedValue : allowedValues) {
                                if (matchesKeyAndValue(product, key, allowedValue)) {
                                    return true;
