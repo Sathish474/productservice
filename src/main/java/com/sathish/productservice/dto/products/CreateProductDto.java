@@ -4,9 +4,11 @@ import com.sathish.productservice.models.Category;
 import com.sathish.productservice.models.Product;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class CreateProductDto {
     private Long id;
     private String title;

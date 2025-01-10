@@ -3,9 +3,11 @@ package com.sathish.productservice.dto.products;
 import com.sathish.productservice.models.Product;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class GetProductDto {
     private Long id;
     private String title;
