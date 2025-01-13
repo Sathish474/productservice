@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findById(Long id);
 
-    Boolean deleteById(long id);
+    //Boolean deleteById(long id);
 
     Optional<List<Product>> findByCategory_NameEquals(String name);
 
