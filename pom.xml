@@ -101,9 +101,9 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>it.ozimov</groupId>
+            <groupId>com.github.codemonstur</groupId>
             <artifactId>embedded-redis</artifactId>
-            <version>0.7.2</version>
+            <version>1.4.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
