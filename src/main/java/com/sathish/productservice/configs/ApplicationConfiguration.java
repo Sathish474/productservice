@@ -10,7 +10,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class ApplicationConfiguration {
+public abstract class ApplicationConfiguration {
     @Bean
     @LoadBalanced
     public RestTemplate createRestTemplate() {
@@ -37,4 +37,7 @@ public class ApplicationConfiguration {
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
+
+    @Bean
+    public abstract RedisConnectionFactory redisConnectionFactory();
 }

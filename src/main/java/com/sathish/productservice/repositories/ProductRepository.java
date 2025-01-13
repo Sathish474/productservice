@@ -27,7 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<List<Product>> findByCategory_NameEquals(String name);
 
     @Query("select p from Product p where p.category.name = :s")
-    List<Product> sathishNalabothula(@Param("s") String s);
+    List<Product> nativeQueryExample(@Param("s") String s);
     @Query("select p from Product p where p.id > :id")
     List<Product> someThing(@Param("id") Long id);
 

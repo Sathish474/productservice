@@ -18,7 +18,7 @@ public class CustomHealthIndicator implements HealthIndicator {
         }
     }
 
-    private boolean checkCustomHealth() {
+    public boolean checkCustomHealth() {
         // Implement your custom health check logic here
         return true;
     }
